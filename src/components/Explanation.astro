@@ -109,6 +109,7 @@ const drawbacks = [
 					data-reveal='lines'
 					data-reveal-fade
 					data-reveal-duration='0.8'
+					data-reveal-stagger='0.02'
 					data-reveal-delay='0.2'>
 					Key Benefits of Dynamic Text Reveal
 				</h5>
@@ -119,6 +120,7 @@ const drawbacks = [
 							class='explanation__list'
 							data-reveal='lines'
 							data-reveal-fade
+							data-reveal-stagger='0.01'
 							data-reveal-delay={0.3 + index * 0.07}>
 							{benefit}
 						</p>
@@ -138,6 +140,7 @@ const drawbacks = [
 							class='explanation__list'
 							data-reveal='lines'
 							data-reveal-fade
+							data-reveal-stagger='0.1'
 							data-reveal-delay={0.9 + index * 0.07}>
 							{drawback}
 						</p>
@@ -168,7 +171,11 @@ const drawbacks = [
 		overflow: hidden;
 		padding: 0 2rem;
 	}
-
+	@media (max-width: 768px) {
+		.explanation__column {
+			padding: 0;
+		}
+	}
 	.explanation__column--left {
 		width: 50%;
 	}
@@ -177,17 +184,18 @@ const drawbacks = [
 		width: 50%;
 	}
 
-	.explanation__column h5,
-	.explanation__column h6 {
+	.explanation__column h5 {
 		font-size: 1.5rem;
 		font-weight: 400;
 		margin-bottom: 0.5rem;
+		opacity: 0;
 	}
 
 	.explanation__text {
 		font-size: 1.25rem;
 		line-height: 1.6;
 		font-weight: 400;
+		opacity: 0;
 	}
 
 	.explanation__list {
@@ -195,6 +203,7 @@ const drawbacks = [
 		line-height: 1.6;
 		font-weight: 400;
 		margin-left: 0.5rem;
+		opacity: 0;
 	}
 
 	@media (max-width: 768px) {

@@ -9,7 +9,8 @@
 			data-reveal='lines'
 			data-reveal-fade
 			data-reveal-delay='0.25'
-			data-reveal-duration='1.2'>
+			data-reveal-duration='1.2'
+			data-reveal-stagger='0.2'>
 			THIS IS RESPONSIVE ANIMATED TITLE
 		</h1>
 	</div>
@@ -40,5 +41,12 @@
 		will-change: transform;
 		margin: 0;
 		padding: 0;
+		opacity: 0;
+	}
+
+	@media (max-width: 768px) {
+		.header__title {
+			font-size: 14vw;
+		}
 	}
 </style>

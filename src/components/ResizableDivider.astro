@@ -46,7 +46,13 @@ const {
 		let leftWidthPercent = parseFloat(storedLeftWidth);
 		let rightWidthPercent = 100 - leftWidthPercent;
 
-		updateColumnWidths();
+		// Check if screen width is below 768px on initial load
+		if (window.innerWidth <= 768) {
+			leftColumn.style.width = '100%';
+			rightColumn.style.width = '100%';
+		} else {
+			updateColumnWidths();
+		}
 
 		updateDividerHandlePosition();
 
@@ -106,8 +112,8 @@ const {
 		window.addEventListener('scroll', updateDividerHandlePosition);
 		window.addEventListener('resize', () => {
 			if (window.innerWidth <= 768) {
-				leftColumn.style.width = '';
-				rightColumn.style.width = '';
+				leftColumn.style.width = '100%';
+				rightColumn.style.width = '100%';
 			} else {
 				updateColumnWidths();
 			}

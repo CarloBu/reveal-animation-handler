@@ -21,7 +21,7 @@ const { title = 'Astro Text Reveal' } = Astro.props;
 		<link
 			rel='icon'
 			type='image/svg+xml'
-			href='/astro.svg'
+			href='/favicon.svg'
 		/>
 		<meta
 			name='generator'
@@ -60,10 +60,7 @@ const { title = 'Astro Text Reveal' } = Astro.props;
 			href='https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap'
 			rel='stylesheet'
 		/>
-		<link
-			href='https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap'
-			rel='stylesheet'
-		/>
+
 		<ClientRouter />
 	</head>
 	<body>
@@ -88,24 +85,6 @@ const { title = 'Astro Text Reveal' } = Astro.props;
 		height: 100%;
 		font-family: 'Open Sans', sans-serif;
 		scrollbar-gutter: stable;
-	}
-
-	/* Set default opacity to 0 for text elements */
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6,
-	p,
-	span,
-	a,
-	li,
-	[data-reveal],
-	:where([data-reveal='title']),
-	:where([data-reveal='title-words']),
-	:where([data-reveal='lines']) {
-		opacity: 0;
 	}
 
 	#background {
