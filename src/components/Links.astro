@@ -1,0 +1,47 @@
+---
+const links = [
+	{ href: '/', text: '3D Reveal' },
+	{ href: '/title-fade', text: '3D with Fade' },
+	{ href: '/lines', text: 'Flat Reveal' },
+	{ href: '/lines-fade', text: 'Flat with Fade' },
+];
+---
+
+<div class='navigation'>
+	<div class='navigation__links'>
+		{
+			links.map((link) => (
+				<a
+					href={link.href}
+					class='navigation__link'>
+					{link.text}
+				</a>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.navigation__links {
+		display: flex;
+		justify-content: flex-end;
+		gap: 1rem;
+		padding-left: 3rem;
+		padding-right: 3rem;
+	}
+
+	.navigation__link {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+		border: 1px solid #000;
+		text-decoration: none;
+		color: #000;
+		font-weight: 500;
+		transition: all 0.3s ease;
+	}
+
+	.navigation__link:hover {
+		background-color: #000;
+		color: #fff;
+	}
+</style>

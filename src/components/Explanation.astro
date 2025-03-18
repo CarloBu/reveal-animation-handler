@@ -1,0 +1,210 @@
+---
+import ResizableDivider from '@components/ResizableDivider.astro';
+
+const benefits = [
+	'• No need to hardcode line breaks - text adapts to any container',
+	'• Perfect for dynamic content from CMS',
+	'• Works flawlessly across all devices and screen sizes',
+	'• Smooth Developer Experience by using data-attributes',
+	'• Multiple animation types (lines, title, fade) - easily expandable with custom animations',
+];
+
+const animationOptions = [
+	"• data-reveal-duration = '0.8': Controls animation speed",
+	"• data-reveal-delay = '0.2': Sets initial delay before animation",
+	"• data-reveal-stagger = '0.1': Controls timing between lines or words",
+	'• data-reveal-fade: Adds opacity transition instead of mask transition',
+];
+
+const drawbacks = [
+	'• Slightly more JavaScript processing compared to predefined reveal animations',
+	"• Currently doesn't support internal styling with <span> tags",
+	'• Currently only works with single text element at a time',
+];
+---
+
+<section class='explanation'>
+	<div class='explanation__container'>
+		<div class='explanation__columns'>
+			<!-- Left column: Benefits -->
+			<div class='explanation__column explanation__column--left'>
+				<h5
+					data-reveal='lines'
+					data-reveal-duration='0.6'
+					data-reveal-delay='0.1'>
+					How It Works
+				</h5>
+
+				<article class='example__text'>
+					<p
+						class='explanation__text'
+						data-reveal='lines'
+						data-reveal-duration='0.8'
+						data-reveal-delay='0.2'
+						data-reveal-stagger='0.05'>
+						When page loads, the text reveal handler finds all elements with
+						data-reveal attributes and sets their initial opacity to 0 if they
+						are not set in css before. An IntersectionObserver monitors these
+						elements to detect when they become visible in the viewport. Upon
+						visibility, the text content is cloned and temporarily stored: the
+						system creates a clone of the parent element.
+					</p>
+
+					<p
+						class='explanation__text'
+						data-reveal='lines'
+						data-reveal-duration='0.8'
+						data-reveal-delay='0.5'
+						data-reveal-stagger='0.05'>
+						Each word of text is wrapped in a span and added to the clone to
+						analyze positioning. The system measures the Y-coordinate of each
+						word to detect natural line breaks.
+					</p>
+
+					<p
+						class='explanation__text'
+						data-reveal='lines'
+						data-reveal-duration='0.8'
+						data-reveal-delay='0.7'
+						data-reveal-stagger='0.05'>
+						Words on the same vertical position are grouped into lines. The
+						original element is re-structured with each detected line wrapped in
+						its own container for animation. GSAP animations are applied with
+						specified timing (duration, delay, stagger) to reveal each line
+						sequentially.
+					</p>
+				</article>
+				<h5
+					data-reveal='lines'
+					data-reveal-duration='0.6'
+					data-reveal-delay='1.1'>
+					Animation Options
+				</h5>
+
+				{
+					animationOptions.map((option, index) => (
+						<p
+							class='explanation__list'
+							data-reveal='lines'
+							data-reveal-duration='0.6'
+							data-reveal-delay={1.15 + index * 0.08}>
+							{option}
+						</p>
+					))
+				}
+			</div>
+
+			<!-- Resizable divider component -->
+			<ResizableDivider
+				id='explanationDivider'
+				leftColumnSelector='.explanation__column--left'
+				rightColumnSelector='.explanation__column--right'
+				containerSelector='.explanation__columns'
+				localStorageKey='explanation-left-width'
+			/>
+
+			<!-- Right column: How it works -->
+			<div class='explanation__column explanation__column--right'>
+				<h5
+					data-reveal='lines'
+					data-reveal-fade
+					data-reveal-duration='0.8'
+					data-reveal-delay='0.2'>
+					Key Benefits of Dynamic Text Reveal
+				</h5>
+
+				{
+					benefits.map((benefit, index) => (
+						<p
+							class='explanation__list'
+							data-reveal='lines'
+							data-reveal-fade
+							data-reveal-delay={0.3 + index * 0.07}>
+							{benefit}
+						</p>
+					))
+				}
+				<h5
+					data-reveal='lines'
+					data-reveal-fade
+					data-reveal-duration='0.8'
+					data-reveal-delay='0.7'>
+					Drawbacks
+				</h5>
+
+				{
+					drawbacks.map((drawback, index) => (
+						<p
+							class='explanation__list'
+							data-reveal='lines'
+							data-reveal-fade
+							data-reveal-delay={0.9 + index * 0.07}>
+							{drawback}
+						</p>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.explanation {
+		padding: 0 2rem;
+	}
+
+	.explanation__container {
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.explanation__columns {
+		display: flex;
+		position: relative;
+	}
+
+	.explanation__column {
+		position: relative;
+		overflow: hidden;
+		padding: 0 2rem;
+	}
+
+	.explanation__column--left {
+		width: 50%;
+	}
+
+	.explanation__column--right {
+		width: 50%;
+	}
+
+	.explanation__column h5,
+	.explanation__column h6 {
+		font-size: 1.5rem;
+		font-weight: 400;
+		margin-bottom: 0.5rem;
+	}
+
+	.explanation__text {
+		font-size: 1.25rem;
+		line-height: 1.6;
+		font-weight: 400;
+	}
+
+	.explanation__list {
+		font-size: 1.25rem;
+		line-height: 1.6;
+		font-weight: 400;
+		margin-left: 0.5rem;
+	}
+
+	@media (max-width: 768px) {
+		.explanation__columns {
+			flex-direction: column;
+		}
+
+		.explanation__column--left,
+		.explanation__column--right {
+			width: 100%;
+		}
+	}
+</style>

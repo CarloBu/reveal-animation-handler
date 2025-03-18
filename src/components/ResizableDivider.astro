@@ -1,0 +1,146 @@
+---
+export interface Props {
+	id?: string;
+	leftColumnSelector: string;
+	rightColumnSelector: string;
+	containerSelector: string;
+	localStorageKey?: string;
+}
+
+const {
+	id = 'columnDivider',
+	leftColumnSelector,
+	rightColumnSelector,
+	containerSelector,
+	localStorageKey = 'column-divider-position',
+} = Astro.props;
+---
+
+<div
+	class='column-divider'
+	id={id}
+	title='Drag to resize columns'>
+	<div class='column-divider-handle'></div>
+</div>
+
+<script
+	define:vars={{
+		id,
+		leftColumnSelector,
+		rightColumnSelector,
+		containerSelector,
+		localStorageKey,
+	}}
+>
+	document.addEventListener('astro:page-load', () => {
+		const divider = document.getElementById(id);
+		const dividerHandle = divider?.querySelector('.column-divider-handle');
+		const container = document.querySelector(containerSelector);
+		const leftColumn = document.querySelector(leftColumnSelector);
+		const rightColumn = document.querySelector(rightColumnSelector);
+
+		if (!divider || !container || !leftColumn || !rightColumn || !dividerHandle)
+			return;
+
+		const storedLeftWidth = localStorage.getItem(localStorageKey) || '50';
+		let leftWidthPercent = parseFloat(storedLeftWidth);
+		let rightWidthPercent = 100 - leftWidthPercent;
+
+		updateColumnWidths();
+
+		updateDividerHandlePosition();
+
+		let isDragging = false;
+
+		divider.addEventListener('mousedown', (e) => {
+			isDragging = true;
+			document.body.style.cursor = 'grab';
+			document.body.style.userSelect = 'none';
+		});
+
+		document.addEventListener('mousemove', (e) => {
+			if (!isDragging) return;
+
+			const containerRect = container.getBoundingClientRect();
+			const containerWidth = containerRect.width;
+			const containerLeft = containerRect.left;
+
+			const posX = e.clientX - containerLeft;
+			const percentX = (posX / containerWidth) * 100;
+
+			if (percentX >= 20 && percentX <= 80) {
+				leftWidthPercent = percentX;
+				rightWidthPercent = 100 - percentX;
+				updateColumnWidths();
+
+				localStorage.setItem(localStorageKey, leftWidthPercent.toString());
+
+				window.dispatchEvent(new Event('resize'));
+			}
+		});
+
+		document.addEventListener('mouseup', () => {
+			if (isDragging) {
+				isDragging = false;
+				document.body.style.cursor = '';
+				document.body.style.userSelect = '';
+			}
+		});
+
+		function updateColumnWidths() {
+			leftColumn.style.width = `${leftWidthPercent}%`;
+			rightColumn.style.width = `${rightWidthPercent}%`;
+		}
+
+		function updateDividerHandlePosition() {
+			if (!divider || !dividerHandle) return;
+
+			const dividerRect = divider.getBoundingClientRect();
+			const viewportHeight = window.innerHeight;
+
+			dividerHandle.style.position = 'fixed';
+			dividerHandle.style.top = `${viewportHeight / 2}px`;
+			dividerHandle.style.left = `${dividerRect.left - 9}px`;
+		}
+
+		window.addEventListener('scroll', updateDividerHandlePosition);
+		window.addEventListener('resize', () => {
+			if (window.innerWidth <= 768) {
+				leftColumn.style.width = '';
+				rightColumn.style.width = '';
+			} else {
+				updateColumnWidths();
+			}
+			updateDividerHandlePosition();
+		});
+	});
+</script>
+
+<style>
+	.column-divider {
+		width: 2px;
+		background-color: #000;
+		cursor: grab;
+		display: flex;
+		padding: 0;
+		z-index: 10;
+		position: relative;
+	}
+
+	.column-divider-handle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: rgba(0, 0, 0, 1);
+		height: 50px;
+		width: 20px;
+		border-radius: 10px;
+		z-index: 11;
+	}
+
+	@media (max-width: 768px) {
+		.column-divider {
+			display: none;
+		}
+	}
+</style>
