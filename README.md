@@ -2,7 +2,7 @@
 
 A responsive text animation system for Astro that intelligently detects and respects natural line breaks.
 
-![Reveal Animation Handler](https://revelanimationhandler.pages.dev/revelanimationhandler.jpg)
+![Reveal Animation Handler](https://revealanimationhandler.pages.dev/revelanimationhandler.jpg)
 
 ## Features
 
