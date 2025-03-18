@@ -18,6 +18,17 @@ const links = [
 				</a>
 			))
 		}
+		<a
+			href='https://github.com/CarloBu/reveal-animation-handler'
+			class='navigation__link--github'
+			target='_blank'
+			rel='noopener noreferrer'>
+			<img
+				src='/github-mark.svg'
+				alt='GitHub'
+				class='github-icon'
+			/>
+		</a>
 	</div>
 </div>
 
@@ -29,6 +40,8 @@ const links = [
 		gap: 1rem;
 		padding-left: 3rem;
 		padding-right: 3rem;
+		display: flex;
+		align-items: center;
 	}
 
 	.navigation__link {
@@ -44,5 +57,15 @@ const links = [
 	.navigation__link:hover {
 		background-color: #000;
 		color: #fff;
+	}
+
+	.github-icon {
+		width: 2.2rem;
+		height: 2.2rem;
+		vertical-align: middle;
+	}
+
+	.navigation__link--github:hover .github-icon {
+		opacity: 0.75;
 	}
 </style>
