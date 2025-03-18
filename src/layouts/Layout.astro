@@ -21,13 +21,41 @@ const { title = 'Astro Text Reveal' } = Astro.props;
 		<link
 			rel='icon'
 			type='image/svg+xml'
-			href='/favicon.svg'
+			href='/astro.svg'
 		/>
 		<meta
 			name='generator'
 			content={Astro.generator}
 		/>
 		<title>{title}</title>
+
+		<!-- Open Graph / Facebook -->
+		<meta
+			property='og:type'
+			content='website'
+		/>
+		<meta
+			property='og:title'
+			content={title}
+		/>
+		<meta
+			property='og:image'
+			content='/revelanimationhandler.jpg'
+		/>
+
+		<!-- Twitter -->
+		<meta
+			property='twitter:card'
+			content='summary_large_image'
+		/>
+		<meta
+			property='twitter:title'
+			content={title}
+		/>
+		<meta
+			property='twitter:image'
+			content='/revelanimationhandler.jpg'
+		/>
 		<link
 			href='https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap'
 			rel='stylesheet'
