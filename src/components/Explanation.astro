@@ -1,26 +1,5 @@
 ---
 import ResizableDivider from '@components/ResizableDivider.astro';
-
-const benefits = [
-	'• No need to hardcode line breaks - text adapts to any container',
-	'• Perfect for dynamic content from CMS',
-	'• Works flawlessly across all devices and screen sizes',
-	'• Smooth Developer Experience by using data-attributes',
-	'• Multiple animation types (lines, title, fade) - easily expandable with custom animations',
-];
-
-const animationOptions = [
-	"• data-reveal-duration = '0.8': Controls animation speed",
-	"• data-reveal-delay = '0.2': Sets initial delay before animation",
-	"• data-reveal-stagger = '0.1': Controls timing between lines or words",
-	'• data-reveal-fade: Adds opacity transition instead of mask transition',
-];
-
-const drawbacks = [
-	'• Slightly more JavaScript processing compared to predefined reveal animations',
-	"• Currently doesn't support internal styling with <span> tags",
-	'• Currently only works with single text element at a time',
-];
 ---
 
 <section class='explanation'>
@@ -30,6 +9,7 @@ const drawbacks = [
 			<div class='explanation__column explanation__column--left'>
 				<h5
 					data-reveal='lines'
+					data-reveal-fade
 					data-reveal-duration='0.6'
 					data-reveal-delay='0.1'>
 					How It Works
@@ -39,59 +19,69 @@ const drawbacks = [
 					<p
 						class='explanation__text'
 						data-reveal='lines'
+						data-reveal-fade
 						data-reveal-duration='0.8'
 						data-reveal-delay='0.2'
 						data-reveal-stagger='0.05'>
-						When page loads, the text reveal handler finds all elements with
-						data-reveal attributes and sets their initial opacity to 0 if they
-						are not set in css before. An IntersectionObserver monitors these
-						elements to detect when they become visible in the viewport. Upon
-						visibility, the text content is cloned and temporarily stored: the
-						system creates a clone of the parent element.
+						When page loads, the <span class='text-bold'>text reveal</span> handler
+						finds all elements with data-reveal attributes and sets their initial
+						opacity to 0 if they are not set in css before. An <span
+							class='text-bold'>IntersectionObserver</span
+						> monitors these elements to detect when they become visible in the viewport.
+						Upon
+						<span class='text-bold'>visibility</span>, the text content is
+						cloned and temporarily stored: the system creates a clone of the
+						parent element.
 					</p>
 
 					<p
 						class='explanation__text'
 						data-reveal='lines'
+						data-reveal-fade
 						data-reveal-duration='0.8'
 						data-reveal-delay='0.5'
 						data-reveal-stagger='0.05'>
-						Each word of text is wrapped in a span and added to the clone to
-						analyze positioning. The system measures the Y-coordinate of each
-						word to detect natural line breaks.
+						Each word of text is wrapped in a <span class='text-bold'>span</span
+						> and added to the clone to analyze positioning. The system measures
+						the <span class='text-bold'>Y-coordinate</span> of each word to detect
+						natural <span class='text-bold'>line breaks</span>.
 					</p>
 
 					<p
 						class='explanation__text'
 						data-reveal='lines'
+						data-reveal-fade
 						data-reveal-duration='0.8'
 						data-reveal-delay='0.7'
 						data-reveal-stagger='0.05'>
-						Words on the same vertical position are grouped into lines. The
-						original element is re-structured with each detected line wrapped in
-						its own container for animation. GSAP animations are applied with
-						specified timing (duration, delay, stagger) to reveal each line
-						sequentially.
+						Words on the same vertical position are grouped into <span
+							class='text-bold'>lines</span
+						>. The original element is re-structured with each detected line
+						wrapped in its own <span class='text-bold'>container</span> for animation.
+						GSAP animations are applied with specified timing (duration, delay, stagger)
+						to reveal each line sequentially.
 					</p>
 				</article>
 				<h5
 					data-reveal='lines'
+					data-reveal-fade
 					data-reveal-duration='0.6'
 					data-reveal-delay='1.1'>
 					Animation Options
 				</h5>
 
-				{
-					animationOptions.map((option, index) => (
-						<p
-							class='explanation__list'
-							data-reveal='lines'
-							data-reveal-duration='0.6'
-							data-reveal-delay={1.15 + index * 0.08}>
-							{option}
-						</p>
-					))
-				}
+				<p
+					class='explanation__list'
+					data-reveal='lines'
+					data-reveal-fade
+					data-reveal-stagger='0.1'
+					data-reveal-delay='1.15'>
+					• data-reveal-duration = '0.8': Controls animation speed<br />
+					• data-reveal-delay = '0.2': Sets initial delay before animation<br />
+					• data-reveal-stagger = '0.1': Controls timing between lines or words<br
+					/>
+					• data-reveal-fade: Adds opacity transition instead of mask transition
+				</p>
 			</div>
 
 			<!-- Resizable divider component -->
@@ -113,19 +103,17 @@ const drawbacks = [
 					data-reveal-delay='0.2'>
 					Key Benefits of Dynamic Text Reveal
 				</h5>
-
-				{
-					benefits.map((benefit, index) => (
-						<p
-							class='explanation__list'
-							data-reveal='lines'
-							data-reveal-fade
-							data-reveal-stagger='0.01'
-							data-reveal-delay={0.3 + index * 0.07}>
-							{benefit}
-						</p>
-					))
-				}
+				<p
+					class='explanation__list'
+					data-reveal='lines'
+					data-reveal-fade>
+					• No need to hardcode line breaks - text adapts to any container<br />
+					• Perfect for dynamic content from CMS<br />
+					• Works flawlessly across all devices and screen sizes<br />
+					• Smooth Developer Experience by using data-attributes<br />
+					• Multiple animation types (lines, title, fade) - easily expandable with
+					custom animations
+				</p>
 				<h5
 					data-reveal='lines'
 					data-reveal-fade
@@ -133,19 +121,17 @@ const drawbacks = [
 					data-reveal-delay='0.7'>
 					Drawbacks
 				</h5>
-
-				{
-					drawbacks.map((drawback, index) => (
-						<p
-							class='explanation__list'
-							data-reveal='lines'
-							data-reveal-fade
-							data-reveal-stagger='0.1'
-							data-reveal-delay={0.9 + index * 0.07}>
-							{drawback}
-						</p>
-					))
-				}
+				<p
+					class='explanation__list'
+					data-reveal='lines'
+					data-reveal-fade
+					data-reveal-stagger='0.1'
+					data-reveal-delay='0.9'>
+					• Slightly more JavaScript processing compared to predefined reveal
+					animations<br />
+					• Currently doesn't support internal styling with tags<br />
+					• Currently only works with single text element at a time
+				</p>
 			</div>
 		</div>
 	</div>
@@ -204,6 +190,10 @@ const drawbacks = [
 		font-weight: 400;
 		margin-left: 0.5rem;
 		opacity: 0;
+	}
+
+	.text-bold {
+		font-weight: 900;
 	}
 
 	@media (max-width: 768px) {
