@@ -64,7 +64,7 @@ Add the `data-reveal` attribute to any text element you want to animate:
 
 ## How It Works
 
-FluidReveal solves common text animation problems through a 4-step process:
+The Reveal Animation Handler solves common text animation problems through a 4-step process:
 
 1. **Intelligent Detection**: Text elements are temporarily cloned to analyze where text naturally breaks across lines
 2. **Smart Conversion**: Text is transformed into individually animatable lines while preserving original formatting
@@ -90,8 +90,7 @@ This approach avoids common issues with text animations:
 
 ## Browser Support
 
-FluidReveal works in all modern browsers that support:
-- Intersection Observer API
+The Reveal Animation Handler works in all modern browsers that support Intersection Observer API
 
 ## License
 
