@@ -447,18 +447,12 @@ const animateLines = (
  * Split text into lines to properly handle line breaks
  */
 const splitTextIntoLines = (element: HTMLElement): string[] => {
-	// Store original content for temporary use within this function
-	const originalContent = element.innerHTML;
-
-	// Clean and normalize the text content
-	const text = element.textContent || '';
-	const normalizedText = text.replace(/\s+/g, ' ').trim();
-
-	const words = normalizedText.split(' ').filter((word) => word.length > 0);
+	// Preserve the original HTML so it can be restored later
+	const originalHTML = element.innerHTML;
 
 	// Clone the entire parent element to maintain layout context
 	const parentClone = element.parentElement?.cloneNode(false) as HTMLElement;
-	if (!parentClone) return [normalizedText];
+	if (!parentClone) return [originalHTML];
 
 	// Copy parent element styles and positioning
 	parentClone.style.cssText = window.getComputedStyle(
@@ -470,11 +464,12 @@ const splitTextIntoLines = (element: HTMLElement): string[] => {
 	parentClone.style.visibility = 'hidden';
 	parentClone.style.pointerEvents = 'none';
 
-	// Create a clone of the original element
-	const elementClone = element.cloneNode(false) as HTMLElement;
-	elementClone.style.cssText = window.getComputedStyle(element).cssText;
+	// Deep-clone the element so ALL inline markup (<span>, <em>, etc.) is preserved
+	const elementClone = element.cloneNode(true) as HTMLElement;
+	const elementStyle = window.getComputedStyle(element);
+	elementClone.style.cssText = elementStyle.cssText;
 	elementClone.style.position = 'static';
-	elementClone.style.width = getComputedStyle(element).width;
+	elementClone.style.width = elementStyle.width;
 	elementClone.style.height = 'auto';
 	elementClone.style.transform = 'none';
 
@@ -484,45 +479,86 @@ const splitTextIntoLines = (element: HTMLElement): string[] => {
 	// Add the parent clone to the document
 	document.body.appendChild(parentClone);
 
-	// Wrap each word in a span inside the cloned element
-	elementClone.innerHTML = words
-		.map(
-			(word, index) =>
-				`<span class="split-word" style="display: inline-block;" data-word-index="${index}">${word}</span>`
-		)
-		.join(' ');
-
-	// Get all word spans we just created
-	const wordSpans = elementClone.querySelectorAll(
-		'.split-word'
-	) as NodeListOf<HTMLElement>;
-	const lines: Array<string[]> = [[]];
-	let currentLine = 0;
-
-	if (wordSpans.length > 0) {
-		let prevTop = wordSpans[0].getBoundingClientRect().top;
-
-		wordSpans.forEach((span) => {
-			const rect = span.getBoundingClientRect();
-
-			// If this word is on a new line (different Y position)
-			if (Math.abs(rect.top - prevTop) > 2) {
-				currentLine++;
-				prevTop = rect.top;
-				lines[currentLine] = [];
-			}
-
-			lines[currentLine].push(span.textContent || '');
-		});
+	// Wrap every WORD in an inline-block span (.split-word)
+	// We only process TEXT nodes, leaving any existing inline markup intact
+	let wordIndex = 0;
+	const walker = document.createTreeWalker(elementClone, NodeFilter.SHOW_TEXT);
+	const textNodes: Text[] = [];
+	while (walker.nextNode()) {
+		textNodes.push(walker.currentNode as Text);
 	}
+
+	textNodes.forEach((textNode) => {
+		const parts = (textNode.textContent || '').split(/(\s+)/);
+		const frag = document.createDocumentFragment();
+
+		parts.forEach((part) => {
+			if (part === '') return;
+			if (/^\s+$/.test(part)) {
+				// Preserve whitespace exactly
+				frag.appendChild(document.createTextNode(part));
+			} else {
+				const span = document.createElement('span');
+				span.className = 'split-word';
+				span.style.display = 'inline-block';
+				span.dataset.wordIndex = String(wordIndex++);
+				span.textContent = part;
+				frag.appendChild(span);
+			}
+		});
+
+		textNode.parentNode?.replaceChild(frag, textNode);
+	});
+
+	// Group helper spans by their Y coordinate to form visual lines
+	const wordSpans = elementClone.querySelectorAll<HTMLElement>('.split-word');
+	if (wordSpans.length === 0) {
+		parentClone.remove();
+		return [originalHTML];
+	}
+
+	const lineGroups: HTMLElement[][] = [[]];
+	let currentLine = 0;
+	let prevTop = wordSpans[0].getBoundingClientRect().top;
+
+	wordSpans.forEach((span) => {
+		const top = span.getBoundingClientRect().top;
+		if (Math.abs(top - prevTop) > 2) {
+			currentLine++;
+			prevTop = top;
+			lineGroups[currentLine] = [];
+		}
+		lineGroups[currentLine].push(span);
+	});
+
+	// Build HTML for each visual line, removing helper spans but preserving
+	// original inline markup
+	const linesHTML = lineGroups.map((spansInLine) => {
+		if (spansInLine.length === 0) return '';
+
+		const range = document.createRange();
+		range.setStartBefore(spansInLine[0]);
+		range.setEndAfter(spansInLine[spansInLine.length - 1]);
+		const fragment = range.cloneContents();
+
+		const container = document.createElement('div');
+		container.appendChild(fragment);
+
+		// Remove our helper spans while keeping their content
+		container.querySelectorAll<HTMLElement>('.split-word').forEach((helper) => {
+			helper.replaceWith(...Array.from(helper.childNodes));
+		});
+
+		return container.innerHTML.trim();
+	});
 
 	// Clean up - remove the temporary elements
 	parentClone.remove();
 
 	// Restore the original content
-	element.innerHTML = originalContent;
+	element.innerHTML = originalHTML;
 
-	return lines.map((lineWords) => lineWords.join(' '));
+	return linesHTML;
 };
 
 // Add standard DOM content loaded event to ensure initialization
