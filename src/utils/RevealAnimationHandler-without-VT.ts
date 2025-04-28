@@ -1140,21 +1140,23 @@ function insertSrOnlyText(element: HTMLElement): void {
 }
 
 // Add standard DOM content loaded event to ensure initialization
-document.addEventListener('astro:page-load', () => {
+document.addEventListener('DOMContentLoaded', () => {
 	initTextAnimations();
 });
 
-// Clean up event listeners when the page is unloaded
-document.addEventListener('astro:before-preparation', () => {
-	// Clear any pending resize timeouts
-	if (resizeTimeout !== null) {
-		window.clearTimeout(resizeTimeout);
-		resizeTimeout = null;
-	}
+// For client-side navigation without view transitions
+window.addEventListener('popstate', () => {
+	// Reset the state of animated elements
+	animatedElements.forEach((element) => {
+		restoreOriginalText(element);
+	});
 
-	// Remove resize event listener
-	window.removeEventListener('resize', handleWindowResize);
-
-	// Clear animated elements array to prevent memory leaks
+	// Clear animated elements array
 	animatedElements.length = 0;
+
+	// Reinitialize animations
+	initTextAnimations();
 });
+
+// Export the init function for manual initialization if needed
+export { initTextAnimations };

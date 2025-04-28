@@ -9,8 +9,8 @@ A responsive text animation system for Astro that intelligently detects and resp
 - **Dynamic Line Break Detection**: Intelligently detects natural text flows without hardcoding
 - **Responsive by Design**: Automatically adapts to any viewport size
 - **Multiple Animation Types**: 
-  - `title`: 3D title animation effect
-  - `lines`: Smooth line-by-line reveal animation
+  - `perspective`: 3D perspective animation effect
+  - `slide`: Smooth line-by-line reveal animation
 - **Customizable Options**:
   - Animation duration
   - Delay timing
@@ -19,6 +19,7 @@ A responsive text animation system for Astro that intelligently detects and resp
 - **Zero External CSS Required**: All styling is included inline
 - **Viewport-Aware**: Elements only animate when they enter the viewport
 - **Astro Integration**: Works seamlessly with Astro's view transitions
+- **Built-in Accessibility**: Full screen reader support with no extra configuration
 
 ## Installation
 
@@ -47,17 +48,17 @@ Add the `data-reveal` attribute to any text element you want to animate:
 
 ```html
 <!-- Simple line-by-line animation -->
-<p data-reveal="lines">
+<p data-reveal="slide">
   This text will animate line by line as it becomes visible.
 </p>
 
-<!-- 3D title animation with fade -->
-<h1 data-reveal="title" data-reveal-fade>
+<!-- 3D perspective animation with fade -->
+<h1 data-reveal="perspective" data-reveal-fade>
   This title will animate with a 3D effect and fade in.
 </h1>
 
 <!-- Customized animation timing -->
-<h2 data-reveal="lines" data-reveal-duration="1.2" data-reveal-delay="0.5" data-reveal-stagger="0.15">
+<h2 data-reveal="slide" data-reveal-duration="1.2" data-reveal-delay="0.5" data-reveal-stagger="0.15">
   This will animate slower, with a delay, and more time between lines.
 </h2>
 ```
@@ -80,13 +81,33 @@ This approach avoids common issues with text animations:
 
 ## Options
 
-| Attribute              | Description                                   | Default | Example                     |
-|------------------------|-----------------------------------------------|---------|-----------------------------|
-| `data-reveal`          | Animation type: "title" or "lines"            | "lines" | `data-reveal="title"`       |
-| `data-reveal-duration` | Animation duration in seconds                 | 0.75    | `data-reveal-duration="1.5"`|
-| `data-reveal-delay`    | Delay before animation in seconds             | 0       | `data-reveal-delay="0.2"`   |
-| `data-reveal-stagger`  | Time between animated elements in seconds     | 0.1     | `data-reveal-stagger="0.05"`|
-| `data-reveal-fade`     | Add opacity animation (true/false)            | false   | `data-reveal-fade`          |
+| Attribute                      | Description                                   | Default | Example                       |
+|--------------------------------|-----------------------------------------------|---------|-------------------------------|
+| `data-reveal`                  | Animation type: "perspective" or "slide"      | "slide" | `data-reveal="perspective"`   |
+| `data-reveal-duration`         | Animation duration in seconds                 | 0.75    | `data-reveal-duration="1.5"`  |
+| `data-reveal-delay`            | Delay before animation in seconds             | 0       | `data-reveal-delay="0.2"`     |
+| `data-reveal-stagger`          | Time between animated elements in seconds     | 0.1     | `data-reveal-stagger="0.05"`  |
+| `data-reveal-fade`             | Add opacity animation (true/false)            | false   | `data-reveal-fade`            |
+| `data-reveal-blur`             | Add blur and opacity transition               | false   | `data-reveal-blur`            |
+| `data-reveal-keep-will-change` | Keep will-change: transform after animation   | false   | `data-reveal-keep-will-change`|
+
+## Accessibility
+
+The Reveal Animation Handler includes built-in accessibility support without requiring any additional configuration:
+
+- Each animated element maintains a hidden copy of the original text for screen readers
+  - A visually-hidden span (class="sr-only") contains the full, unbroken text
+  - Required styling is injected inline, no external CSS needed
+- All visual animation containers are marked with `aria-hidden="true"` so assistive technologies ignore the decorative elements
+- Group animations (using data-reveal on wrapper elements) receive the same accessibility treatment
+- When elements are restored (e.g., on resize), the screen-reader text is preserved
+
+**Benefits:**
+- Visual animations remain unchanged for sighted users
+- Screen readers announce the complete content once, exactly as it appears in source HTML
+- No additional configuration required - works automatically
+
+If you already have a global visually-hidden helper class, you can safely override the inline styles with your own CSS.
 
 ## Browser Support
 

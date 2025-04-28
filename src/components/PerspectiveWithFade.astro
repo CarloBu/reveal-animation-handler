@@ -1,0 +1,244 @@
+---
+import ResizableDivider from '@components/ResizableDivider.astro';
+---
+
+<!-- Header Section with Perspective Animation + Fade -->
+<div class='header'>
+	<div class='header__content'>
+		<h1
+			class='header__title'
+			data-reveal='perspective'
+			data-reveal-fade
+			data-reveal-duration='1.2'
+			data-reveal-delay='0.25'
+			data-reveal-stagger='0.2'>
+			PERSPECTIVE FADE ANIMATION
+		</h1>
+	</div>
+</div>
+
+<!-- Explanation Section -->
+<section class='explanation'>
+	<div class='explanation__container'>
+		<div class='explanation__columns'>
+			<!-- Left column: Benefits -->
+
+			<div
+				class='explanation__column explanation__column--left'
+				data-reveal='perspective'
+				data-reveal-fade
+				data-reveal-delay='0.4'
+				data-reveal-stagger='0.05'>
+				<h5>How It Works</h5>
+				<p class='explanation__text'>
+					The <span class='text-bold'>RevealAnimationHandler</span> is a powerful,
+					zero-configuration animation system with GSAP as its only dependency. It
+					automatically finds elements with data-reveal attributes and sets their
+					initial opacity. An <span class='text-bold'>IntersectionObserver</span
+					> monitors these elements to trigger animations only when they become visible
+					in the viewport. Upon visibility, the handler intelligently analyzes your
+					text content for proper animation.
+				</p>
+
+				<p class='explanation__text'>
+					Each word is dynamically wrapped in a <span class='text-bold'
+						>span</span
+					> element within a temporary clone to analyze its position. The system
+					measures <span class='text-bold'>Y-coordinates</span> to detect natural
+					<span class='text-bold'>line breaks</span> without requiring manual formatting.
+				</p>
+
+				<p class='explanation__text'>
+					Words at the same vertical position are automatically grouped into <span
+						class='text-bold'>lines</span
+					>, and the original element is restructured with each detected line
+					wrapped in its own <span class='text-bold'>container</span>. The
+					handler applies GSAP animations with your specified timing parameters
+					(duration, delay, stagger) for smooth, professional text reveals that
+					adapt to any screen size or container width.
+				</p>
+				<h5>Animation Options</h5>
+
+				<p class='explanation__list'>
+					• data-reveal="perspective": Creates 3D title reveal effect
+					<br />
+					• data-reveal="slide": Creates line-by-line reveal effect
+					<br />
+					• data-reveal-duration = '0.8': Controls animation speed
+					<br />
+					• data-reveal-delay = '0.2': Sets initial delay before animation
+					<br />
+					• data-reveal-stagger = '0.1': Controls timing between lines
+					<br />
+					• data-reveal-fade: Adds opacity transition instead of mask transition
+					<br />
+					• data-reveal-blur: Adds blur and opacity transition for enhanced effect
+					<br />
+					• data-reveal-keep-will-change: Keeps will-change: transform after animation
+				</p>
+			</div>
+
+			<!-- Resizable divider component -->
+			<ResizableDivider
+				id='explanationDivider'
+				leftColumnSelector='.explanation__column--left'
+				rightColumnSelector='.explanation__column--right'
+				containerSelector='.explanation__columns'
+				localStorageKey='explanation-left-width'
+			/>
+
+			<!-- Right column: How it works -->
+			<div
+				class='explanation__column explanation__column--right'
+				data-reveal='perspective'
+				data-reveal-fade
+				data-reveal-delay='0.5'
+				data-reveal-stagger='0.05'
+				data-reveal-keep-will-change>
+				<h5>Key Benefits of Dynamic Text Reveal</h5>
+				<p>
+					• Zero configuration - just import the handler and it works
+					automatically
+					<br />
+					• No need to hardcode line breaks - text adapts to any container width
+					<br />
+					• Perfect for dynamic content from CMS systems
+					<br />
+					• Works flawlessly across all devices and screen sizes
+					<br />
+					• Simple developer experience using declarative data-attributes
+					<br />
+					• Multiple animation types with customizable parameters
+					<br />
+					• Built-in ARIA accessibility support for screen readers
+				</p>
+				<h5>Try It Yourself!</h5>
+				<p>
+					Grab the divider and resize this panel to see the reveal handler in
+					action! When you resize, the handler detects the dimension change and
+					restores the original HTML that was saved during initialization. This
+					efficient approach avoids the need for computationally expensive text
+					analysis on every resize while maintaining perfect animations.
+				</p>
+				<h5>Drawbacks</h5>
+				<p>
+					• Slightly more JavaScript processing compared to predefined reveal
+					animations
+					<br />
+					• Requires GSAP as its only external dependency
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* Header Styles */
+	.header {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding-top: 1rem;
+		height: auto;
+	}
+
+	.header__content {
+		width: 100%;
+		text-align: center;
+	}
+
+	.header__title {
+		overflow: visible;
+		color: black;
+		font-size: 6.5rem;
+		font-weight: 700;
+		font-family: 'Open Sans', sans-serif;
+		letter-spacing: -0.02em;
+		will-change: transform;
+		margin: 0;
+		padding: 0;
+		opacity: 0;
+	}
+
+	@media (max-width: 768px) {
+		.header__title {
+			font-size: 14vw;
+		}
+	}
+
+	/* Explanation Styles */
+	.explanation {
+		padding: 2rem;
+	}
+
+	.explanation__container {
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.explanation__columns {
+		display: flex;
+		position: relative;
+	}
+
+	.explanation__column {
+		position: relative;
+		overflow: visible;
+		padding: 0 2rem;
+	}
+
+	@media (max-width: 768px) {
+		.explanation__column {
+			padding: 0;
+		}
+	}
+
+	.explanation__column--left {
+		width: 50%;
+	}
+
+	.explanation__column--right {
+		width: 50%;
+	}
+
+	/* Hide all text elements by default */
+	.explanation__column h5,
+	.explanation__column p {
+		opacity: 0;
+	}
+
+	.explanation__column h5 {
+		font-size: 1.5rem;
+		font-weight: 400;
+		margin-bottom: 0.5rem;
+	}
+
+	.explanation__text {
+		font-size: 1.25rem;
+		line-height: 1.6;
+		font-weight: 400;
+	}
+
+	.explanation__list {
+		font-size: 1.25rem;
+		line-height: 1.6;
+		font-weight: 400;
+		margin-left: 0.5rem;
+	}
+
+	.text-bold {
+		font-weight: 900;
+	}
+
+	@media (max-width: 768px) {
+		.explanation__columns {
+			flex-direction: column;
+		}
+
+		.explanation__column--left,
+		.explanation__column--right {
+			width: 100%;
+		}
+	}
+</style>
